@@ -14,27 +14,28 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("M");
 
-  const addItem = useCartStore((state) => state.addItem);
+  // CORRECCIÓN: Agregamos (state: any) para evitar el error rojo de TypeScript
+  const addItem = useCartStore((state: any) => state.addItem);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
-        // 1. Obtenemos la variable (que ahora sabemos que NO tiene /api)
+        // 1. Obtenemos la variable de entorno
         const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-        // 2. Truco de seguridad:
-        // Si la URL ya trae "/api" (por si acaso), la usamos tal cual.
-        // Si NO la trae (tu caso en Vercel), se la pegamos manual.
+        // 2. Lógica Inteligente:
+        // Si la URL de Vercel NO termina en "/api", se lo agregamos aquí.
+        // Esto arregla el error 404 en producción.
         const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
 
-        // 3. Ahora la petición quedará perfecta: .../api/products/1
+        // 3. Petición correcta: ...railway.app/api/products/123
         const response = await axios.get(`${apiUrl}/products/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.error("Error cargando producto:", error);
         toast.error("Could not load product details");
-        // navigate("/shop"); // Mantén esto apagado para ver si se arregló
+        // navigate("/shop"); // Mantén esto comentado para debuggear
       } finally {
         setLoading(false);
       }
@@ -64,32 +65,28 @@ export default function ProductDetails() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
-          {/* COLUMNA IZQUIERDA: IMAGEN LIMPIA (Sin marcos, sin fondos) */}
+          {/* COLUMNA IZQUIERDA: IMAGEN */}
           <div className="w-full flex items-center justify-center bg-transparent">
-            {/* Limitamos la altura máxima para que no sea gigante */}
             <img
               src={product.image}
               alt={product.title}
-              // 1. loading="eager": Le dice al navegador "Cárgala YA, no esperes"
               loading="eager"
-              // 2. fetchPriority="high": Le da prioridad sobre otros recursos (scripts, iconos)
-              // Nota: Si TypeScript se queja, puedes ignorarlo, es un atributo moderno válido.
               // @ts-ignore
               fetchPriority="high"
               className="max-h-[500px] w-auto object-contain mix-blend-multiply dark:mix-blend-normal hover:scale-105 transition-transform duration-700"
             />
           </div>
 
-          {/* COLUMNA DERECHA: INFO REFINADA */}
+          {/* COLUMNA DERECHA: INFO */}
           <div className="flex flex-col pt-2">
-            {/* Categoría e ID */}
+            {/* Categoría */}
             <div className="flex justify-between items-center mb-3">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
                 {product.category}
               </span>
             </div>
 
-            {/* Título (Más pequeño y elegante) */}
+            {/* Título */}
             <h1 className="text-2xl md:text-3xl font-medium tracking-tight mb-4 leading-snug">
               {product.title}
             </h1>
@@ -107,14 +104,13 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* Descripción (Letra más pequeña y gris) */}
+            {/* Descripción */}
             <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-8 text-justify">
               {product.description}
             </p>
 
-            {/* CONDICIONAL: Ocultar tallas si es 'electronics' o 'jewelery' (opcional) */}
-            {/* Usamos .includes() por si la categoría es 'consumer electronics' o algo similar */}
-            {!product.category.toLowerCase().includes("electronic") && (
+            {/* Selector de Talla (Oculto para electrónica/joyería) */}
+            {!product.category.toLowerCase().match(/electronic|jewelery/) && (
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-xs font-bold uppercase tracking-widest">
@@ -143,7 +139,7 @@ export default function ProductDetails() {
               </div>
             )}
 
-            {/* Botones de Acción Compactos */}
+            {/* Botón de Acción */}
             <div className="space-y-4">
               <button
                 onClick={() => {
