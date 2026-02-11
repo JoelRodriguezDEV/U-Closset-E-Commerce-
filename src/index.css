@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* MODO CLARO (Inspirado en tus imágenes: fondo casi blanco, texto casi negro) */
+  --background: #fdfdfd;
+  --foreground: #0a0a0a; /* Texto principal */
+
+  --surface: #ffffff; /* Tarjetas, fondos secundarios */
+
+  --primary: #171717; /* Botones negros sólidos */
+  --primary-foreground: #ffffff;
+
+  --border: #e5e5e5; /* Líneas sutiles */
+}
+
+.dark {
+  /* MODO OSCURO (Elegante, no negro absoluto, sino gris profundo tipo "OLED") */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --surface: #171717;
+
+  --primary: #ededed; /* Botones blancos en modo oscuro */
+  --primary-foreground: #171717;
+
+  --border: #262626;
+}
+
+body {
+  @apply bg-background text-foreground transition-colors duration-300;
+}
+
+/* Animaciones Personalizadas para el Home */
+
+/* El texto que corre horizontalmente */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Zoom muy lento y sutil para el video de fondo */
+@keyframes slow-zoom {
+  0% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 20s ease-in-out infinite alternate;
+}
+
+/* Efecto de entrada suave desde abajo (Fade In Up) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; /* Curva de animación 'elegante' */
+  opacity: 0; /* Empieza invisible */
+}
+
+/* Delays para escalonar las animaciones */
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+/* --- ANIMACIONES ELEGANTES (Pure CSS) --- */
+
+/* 1. Entrada suave desde abajo (Estándar de la industria) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-enter {
+  animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0; /* Empieza invisible */
+}
+
+/* Delays para que no entre todo junto (Efecto cascada) */
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* 2. Efecto de "Respiración" para imágenes (Zoom muy lento) */
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.03);
+  }
+}
+
+.hover-breathe:hover img {
+  animation: breathe 8s ease-out forwards;
+}
+
+/* 3. Subrayado magnético (Se dibuja de izquierda a derecha) */
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: bottom right;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* --- EFECTO DE ESCRITURA ELEGANTE (Split Text Reveal) --- */
+
+/* La animación de cada letra individual */
+@keyframes revealChar {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9); /* Empieza un poco abajo y pequeña */
+    filter: blur(4px); /* Un ligero desenfoque inicial le da clase */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* La clase que aplicaremos a cada letra <span> */
+.char-reveal {
+  opacity: 0; /* Empieza invisible */
+  display: inline-block; /* Necesario para que funcionen las transformaciones */
+
+  /* Aquí está el truco:
+     Calculamos el retraso basado en el índice de la letra.
+     0.06s es la velocidad entre letra y letra.
+     Añadimos un delay inicial de 0.5s para que no empiece de golpe al cargar la web.
+  */
+  animation: revealChar 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(0.5s + (var(--char-index) * 0.15s));
+}
