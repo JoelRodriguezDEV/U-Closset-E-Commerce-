@@ -20,12 +20,13 @@ export default function ProductDetails() {
     window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/products/${id}`,
-        );
+        const apiUrl =
+          import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+        const response = await axios.get(`${apiUrl}/products/${id}`);
         setProduct(response.data);
       } catch (error) {
-        navigate("/shop");
+        //  navigate("/shop");
+        toast.error("Could not load product details");
       } finally {
         setLoading(false);
       }
