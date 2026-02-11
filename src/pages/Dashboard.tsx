@@ -1,18 +1,14 @@
-/* eslint-disable*/
 import { useState, useEffect } from "react";
 import {
   Sun,
   Moon,
   LogOut,
   Package,
-  User as UserIcon,
   CreditCard,
   MapPin,
   Heart,
   HelpCircle,
-  Settings,
   Truck,
-  Clock,
   RotateCcw,
   MessageSquare,
   ChevronRight,
@@ -22,7 +18,7 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  // --- LÓGICA DEL TEMA (Mantenemos esto) ---
+  // --- LÓGICA DEL TEMA ---
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
       return (
@@ -44,7 +40,7 @@ export default function Dashboard() {
     }
   }, [isDark]);
 
-  // --- DATOS MOCKUP (Simulación de backend) ---
+  // --- DATOS MOCKUP ---
   const userStats = {
     coupons: 4,
     points: 1250,
@@ -59,7 +55,7 @@ export default function Dashboard() {
 
   return (
     <div className="pt-32 pb-20 min-h-screen max-w-6xl mx-auto px-4 sm:px-6">
-      {/* 1. HEADER DEL PERFIL + NIVEL */}
+      {/* 1. HEADER DEL PERFIL */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 bg-gray-200 dark:bg-zinc-800 rounded-full flex items-center justify-center text-2xl font-bold">
           JM
@@ -75,7 +71,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* 2. MIS ACTIVOS (Wallet / Cupones / Puntos) - Estilo Shein */}
+      {/* 2. MIS ACTIVOS */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="bg-gray-50 dark:bg-zinc-900 p-4 rounded-xl text-center border border-gray-100 dark:border-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer group">
           <div className="flex justify-center mb-2 text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors">
@@ -106,7 +102,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* 3. ORDER TRACKER (Seguimiento de Pedidos) - CLAVE EN E-COMMERCE */}
+      {/* 3. ORDER TRACKER */}
       <section className="mb-10">
         <div className="flex justify-between items-end mb-4 px-1">
           <h2 className="text-lg font-bold">My Orders</h2>
@@ -180,10 +176,9 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* 4. MENÚ DE GESTIÓN (Servicios) */}
+      {/* 4. MENÚ DE GESTIÓN */}
       <h2 className="text-lg font-bold mb-4 px-1">More Services</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {/* Address Book */}
         <button className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-zinc-800 hover:border-black dark:hover:border-white transition-all text-left">
           <div className="p-3 bg-white dark:bg-black rounded-full shadow-sm">
             <MapPin size={20} />
@@ -195,7 +190,6 @@ export default function Dashboard() {
           <ChevronRight size={16} className="text-gray-400" />
         </button>
 
-        {/* Payment Methods */}
         <button className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-zinc-800 hover:border-black dark:hover:border-white transition-all text-left">
           <div className="p-3 bg-white dark:bg-black rounded-full shadow-sm">
             <CreditCard size={20} />
@@ -207,7 +201,6 @@ export default function Dashboard() {
           <ChevronRight size={16} className="text-gray-400" />
         </button>
 
-        {/* Wishlist */}
         <button className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-zinc-800 hover:border-black dark:hover:border-white transition-all text-left">
           <div className="p-3 bg-white dark:bg-black rounded-full shadow-sm">
             <Heart size={20} />
@@ -219,7 +212,6 @@ export default function Dashboard() {
           <ChevronRight size={16} className="text-gray-400" />
         </button>
 
-        {/* Support */}
         <button className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-zinc-800 hover:border-black dark:hover:border-white transition-all text-left">
           <div className="p-3 bg-white dark:bg-black rounded-full shadow-sm">
             <HelpCircle size={20} />
@@ -232,10 +224,9 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* 5. PREFERENCIAS Y LOGOUT (Abajo del todo) */}
+      {/* 5. PREFERENCIAS Y LOGOUT */}
       <div className="border-t border-gray-100 dark:border-zinc-800 pt-8">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-          {/* Dark Mode Toggle */}
           <button
             onClick={() => setIsDark(!isDark)}
             className="flex items-center gap-3 px-6 py-3 bg-gray-100 dark:bg-zinc-900 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors w-full md:w-auto justify-center"
@@ -246,7 +237,6 @@ export default function Dashboard() {
             </span>
           </button>
 
-          {/* Logout */}
           <button className="flex items-center gap-2 text-red-500 hover:text-red-600 text-sm font-medium px-6 py-3 w-full md:w-auto justify-center">
             <LogOut size={18} /> Sign Out
           </button>
