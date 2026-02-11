@@ -20,13 +20,21 @@ export default function ProductDetails() {
     window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
-        const apiUrl =
-          import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+        // 1. Obtenemos la variable (que ahora sabemos que NO tiene /api)
+        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+        // 2. Truco de seguridad:
+        // Si la URL ya trae "/api" (por si acaso), la usamos tal cual.
+        // Si NO la trae (tu caso en Vercel), se la pegamos manual.
+        const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
+
+        // 3. Ahora la petición quedará perfecta: .../api/products/1
         const response = await axios.get(`${apiUrl}/products/${id}`);
         setProduct(response.data);
       } catch (error) {
-        //  navigate("/shop");
+        console.error("Error cargando producto:", error);
         toast.error("Could not load product details");
+        // navigate("/shop"); // Mantén esto apagado para ver si se arregló
       } finally {
         setLoading(false);
       }
