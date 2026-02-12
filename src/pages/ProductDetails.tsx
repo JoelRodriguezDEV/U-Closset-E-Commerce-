@@ -21,19 +21,26 @@ export default function ProductDetails() {
     window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
-        // CORRECCIÓN FINAL:
-        // Usamos la variable TAL CUAL viene de Vercel.
-        // Si en Vercel pusiste "https://...railway.app", usará esa.
-        // Si pusiste "https://...railway.app/api", usará esa.
-        // Ya no forzamos nada.
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+        // 1. Obtenemos la URL base
+        let apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-        // Importante: Quitamos cualquier lógica que agregue "/api" automáticamente.
+        // 2. CORRECCIÓN MAESTRA:
+        // Eliminamos cualquier barra al final para evitar dobles (ej: .app//api)
+        apiUrl = apiUrl.replace(/\/$/, "");
+
+        // 3. Verificamos si le falta el "/api" y se lo agregamos
+        // (La mayoría de backends en NestJS lo requieren para las rutas de datos)
+        if (!apiUrl.endsWith("/api")) {
+          apiUrl = `${apiUrl}/api`;
+        }
+
+        // 4. Imprimimos en consola para que veas qué está pasando (F12 -> Console)
+        console.log("Intentando conectar a:", `${apiUrl}/products/${id}`);
+
         const response = await axios.get(`${apiUrl}/products/${id}`);
-
         setProduct(response.data);
       } catch (error) {
-        console.error("Error cargando producto:", error);
+        console.error("Error detallado:", error);
         toast.error("Could not load product details");
       } finally {
         setLoading(false);
