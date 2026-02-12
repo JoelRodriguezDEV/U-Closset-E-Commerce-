@@ -30,7 +30,9 @@ export default function ProductDetails() {
         const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
 
         // 3. Petición correcta: ...railway.app/api/products/123
-        const response = await axios.get(`${apiUrl}/products/${id}`);
+        const response = await axios.get(
+          `https://uclosset-server-production.up.railway.app/api/products/${id}`,
+        );
         setProduct(response.data);
       } catch (error) {
         console.error("Error cargando producto:", error);
