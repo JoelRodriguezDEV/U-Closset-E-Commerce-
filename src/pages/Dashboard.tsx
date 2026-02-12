@@ -40,10 +40,10 @@ export default function Dashboard() {
       {/* 1. HEADER DEL PERFIL */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 bg-gray-200 dark:bg-zinc-800 rounded-full flex items-center justify-center text-2xl font-bold">
-          JM
+          U
         </div>
         <div>
-          <h1 className="text-2xl font-bold">Joel Miller</h1>
+          <h1 className="text-2xl font-bold">User</h1>
           <div className="flex items-center gap-2 text-sm mt-1">
             <span className="bg-black dark:bg-white text-white dark:text-black px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-sm">
               Platinum Member
