@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { type Product } from "../types";
 import { ShoppingBag, ArrowLeft, Star, Truck, ShieldCheck } from "lucide-react";
+// Usamos any temporalmente para evitar el error de tipos que mencionaste
 import { useCartStore } from "../store/useCartStore";
 import { toast } from "sonner";
 
@@ -14,28 +15,26 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("M");
 
-  // CORRECCIÓN: Agregamos (state: any) para evitar el error rojo de TypeScript
   const addItem = useCartStore((state: any) => state.addItem);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
-        // 1. Obtenemos la variable de entorno
-        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+        // CORRECCIÓN FINAL:
+        // Usamos la variable TAL CUAL viene de Vercel.
+        // Si en Vercel pusiste "https://...railway.app", usará esa.
+        // Si pusiste "https://...railway.app/api", usará esa.
+        // Ya no forzamos nada.
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-        // 2. Lógica Inteligente:
-        // Si la URL de Vercel NO termina en "/api", se lo agregamos aquí.
-        // Esto arregla el error 404 en producción.
-        const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
-
-        // 3. Petición corregida para usar la variable dinámica apiUrl
+        // Importante: Quitamos cualquier lógica que agregue "/api" automáticamente.
         const response = await axios.get(`${apiUrl}/products/${id}`);
+
         setProduct(response.data);
       } catch (error) {
         console.error("Error cargando producto:", error);
         toast.error("Could not load product details");
-        // navigate("/shop"); // Mantén esto comentado para debuggear
       } finally {
         setLoading(false);
       }
@@ -54,7 +53,6 @@ export default function ProductDetails() {
   return (
     <div className="pt-24 pb-12 min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Navegación Simple */}
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
@@ -65,7 +63,7 @@ export default function ProductDetails() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
-          {/* COLUMNA IZQUIERDA: IMAGEN */}
+          {/* Imagen */}
           <div className="w-full flex items-center justify-center bg-transparent">
             <img
               src={product.image}
@@ -77,21 +75,18 @@ export default function ProductDetails() {
             />
           </div>
 
-          {/* COLUMNA DERECHA: INFO */}
+          {/* Info */}
           <div className="flex flex-col pt-2">
-            {/* Categoría */}
             <div className="flex justify-between items-center mb-3">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
                 {product.category}
               </span>
             </div>
 
-            {/* Título */}
             <h1 className="text-2xl md:text-3xl font-medium tracking-tight mb-4 leading-snug">
               {product.title}
             </h1>
 
-            {/* Precio y Rating */}
             <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-zinc-800">
               <p className="text-xl font-semibold">
                 ${product.price.toFixed(2)}
@@ -104,12 +99,10 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* Descripción */}
             <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-8 text-justify">
               {product.description}
             </p>
 
-            {/* Selector de Talla (Oculto para electrónica/joyería) */}
             {!product.category.toLowerCase().match(/electronic|jewelery/) && (
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-3">
@@ -139,7 +132,6 @@ export default function ProductDetails() {
               </div>
             )}
 
-            {/* Botón de Acción */}
             <div className="space-y-4">
               <button
                 onClick={() => {
