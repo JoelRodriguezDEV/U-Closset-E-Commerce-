@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Sun,
   Moon,
@@ -15,30 +14,13 @@ import {
   Wallet,
   Ticket,
   Gift,
+  Monitor,
 } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Dashboard() {
-  // --- LÓGICA DEL TEMA ---
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      return (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.theme = "dark";
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.theme = "light";
-    }
-  }, [isDark]);
+  // --- LÓGICA DEL TEMA (NUEVA) ---
+  const { theme, setTheme } = useTheme();
 
   // --- DATOS MOCKUP ---
   const userStats = {
@@ -224,23 +206,62 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* 5. PREFERENCIAS Y LOGOUT */}
+      {/* 5. PREFERENCIAS Y LOGOUT (NUEVA SECCIÓN DE TEMAS) */}
       <div className="border-t border-gray-100 dark:border-zinc-800 pt-8">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-          <button
-            onClick={() => setIsDark(!isDark)}
-            className="flex items-center gap-3 px-6 py-3 bg-gray-100 dark:bg-zinc-900 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors w-full md:w-auto justify-center"
-          >
-            {isDark ? <Moon size={18} /> : <Sun size={18} />}
-            <span className="text-sm font-medium">
-              {isDark ? "Dark Mode" : "Light Mode"}
-            </span>
-          </button>
+        {/* SECCIÓN DE TEMA */}
+        <div className="bg-gray-50 dark:bg-zinc-900 p-6 rounded-xl mb-6">
+          <h3 className="text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Monitor size={16} /> Appearance
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            {/* Botón Light */}
+            <button
+              onClick={() => setTheme("light")}
+              className={`flex-1 min-w-[100px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all text-sm font-medium ${
+                theme === "light"
+                  ? "bg-white text-black border-black shadow-md dark:border-white"
+                  : "text-gray-500 border-transparent bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-black"
+              }`}
+            >
+              <Sun size={18} /> Light
+            </button>
 
-          <button className="flex items-center gap-2 text-red-500 hover:text-red-600 text-sm font-medium px-6 py-3 w-full md:w-auto justify-center">
-            <LogOut size={18} /> Sign Out
-          </button>
+            {/* Botón Dark */}
+            <button
+              onClick={() => setTheme("dark")}
+              className={`flex-1 min-w-[100px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all text-sm font-medium ${
+                theme === "dark"
+                  ? "bg-black text-white border-black dark:border-white shadow-md"
+                  : "text-gray-500 border-transparent bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-black"
+              }`}
+            >
+              <Moon size={18} /> Dark
+            </button>
+
+            {/* Botón System */}
+            <button
+              onClick={() => setTheme("system")}
+              className={`flex-1 min-w-[100px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all text-sm font-medium ${
+                theme === "system"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                  : "text-gray-500 border-transparent bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-black"
+              }`}
+            >
+              <Monitor size={18} /> System
+            </button>
+          </div>
+          <p className="text-[10px] text-gray-400 mt-3 text-center uppercase tracking-wider">
+            Current:{" "}
+            <span className="font-bold text-black dark:text-white">
+              {theme}
+            </span>
+          </p>
         </div>
+
+        {/* LOGOUT */}
+        <button className="flex items-center gap-2 text-red-500 hover:text-red-600 text-sm font-bold w-full justify-center p-4 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors">
+          <LogOut size={18} /> SIGN OUT
+        </button>
       </div>
     </div>
   );
