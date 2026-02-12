@@ -184,7 +184,6 @@ export default function Navbar() {
               </div>
 
               {/* B. USUARIO (OCULTO EN MÓVIL) */}
-              {/* Agregamos 'hidden md:block' para que solo se vea en escritorio */}
               <Link
                 to="/dashboard"
                 className="hidden md:block hover:opacity-70 transition-opacity z-20"
@@ -204,14 +203,17 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* MOBILE MENU */}
+      {/* MOBILE MENU ACTUALIZADO (Slide from Right) */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[60] flex md:hidden">
+        <div className="fixed inset-0 z-[60] flex justify-end md:hidden">
+          {/* Overlay */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="relative w-[80%] max-w-xs h-full bg-white dark:bg-black text-black dark:text-white shadow-2xl p-6 flex flex-col animate-in slide-in-from-left duration-300">
+
+          {/* Contenido del Menú - Animación slide-in-from-right */}
+          <div className="relative w-[80%] max-w-xs h-full bg-white dark:bg-black text-black dark:text-white shadow-2xl p-6 flex flex-col animate-in slide-in-from-right duration-300">
             <div className="flex justify-between items-center mb-10">
               <span className="text-xl font-bold tracking-tighter">MENU</span>
               <button
@@ -221,6 +223,7 @@ export default function Navbar() {
                 <X size={24} />
               </button>
             </div>
+
             <div className="flex flex-col space-y-6">
               {["Home", "Categories", "Women", "Men"].map((link) => (
                 <Link
@@ -233,13 +236,16 @@ export default function Navbar() {
                         : `/shop?category=${link.toLowerCase()}`
                   }
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-lg font-medium flex justify-between items-center group"
+                  className="text-lg font-medium flex justify-between items-center group hover:text-gray-500 transition-colors"
                 >
-                  {link.toUpperCase()} <ArrowRight size={16} />
+                  {link.toUpperCase()}{" "}
+                  <ArrowRight
+                    size={16}
+                    className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                  />
                 </Link>
               ))}
 
-              {/* ENLACE "MY ACCOUNT" EN EL MENÚ MÓVIL */}
               <Link
                 to="/dashboard"
                 onClick={() => setIsMenuOpen(false)}
