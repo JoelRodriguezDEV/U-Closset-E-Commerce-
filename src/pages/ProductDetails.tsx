@@ -29,10 +29,8 @@ export default function ProductDetails() {
         // Esto arregla el error 404 en producción.
         const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
 
-        // 3. Petición correcta: ...railway.app/api/products/123
-        const response = await axios.get(
-          `https://uclosset-server-production.up.railway.app/api/products/${id}`,
-        );
+        // 3. Petición corregida para usar la variable dinámica apiUrl
+        const response = await axios.get(`${apiUrl}/products/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.error("Error cargando producto:", error);
